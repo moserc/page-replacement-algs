@@ -37,15 +37,4 @@ public class Fifo extends ReplacementAlgorithm{
         }
         return getPageFaultCount();
     }
-
-    /**
-     * Processes the input string, returns a list of page numbers.
-     */
-    public void processInput(){
-        //split the string, ignore commas
-        String[] splitString = input.split(",");
-        for (String num : splitString){
-            insert(Integer.parseInt(num));
-        }
-    }
 }

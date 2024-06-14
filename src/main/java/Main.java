@@ -28,6 +28,7 @@ public class Main {
         System.out.println("\n---------------BEGIN FIFO RESULTS--------------------\n");
 
         int bestResult = 0;
+
         input.add(random3);
         bestResult = processFifo(input, 3, bestResult);
         System.out.println();
@@ -45,7 +46,9 @@ public class Main {
         System.out.println("\n-----------------END FIFO RESULTS--------------------");
 
         System.out.println("\n---------------BEGIN LRU RESULTS---------------------\n");
+
         bestResult = 0;
+
         input.set(3, random3);
         bestResult = processLRU(input, 3, bestResult);
         System.out.println();
@@ -63,7 +66,9 @@ public class Main {
         System.out.println("\n-----------------END LRU RESULTS---------------------");
 
         System.out.println("\n---------------BEGIN OPT RESULTS---------------------\n");
+
         bestResult = 0;
+
         input.set(3, random3);
         bestResult = processOpt(input, 3, bestResult);
         System.out.println();
@@ -74,8 +79,8 @@ public class Main {
 
         input.set(3, random7);
         bestResult = processOpt(input, 7, bestResult);
-        System.out.println();
 
+        System.out.printf("\nBest page fault result for OPT: %d\n", bestResult);
         bestOverall = checkResult(bestOverall, bestResult);
 
         System.out.println("\n-----------------END OPT RESULTS---------------------");

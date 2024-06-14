@@ -2,6 +2,9 @@ package main.java;
 
 import java.util.ArrayDeque;
 
+/**
+ * Class for implementing the least-recently-used page replacement algorithm.
+ */
 public class Lru extends ReplacementAlgorithm{
 
     //constructor
@@ -12,18 +15,7 @@ public class Lru extends ReplacementAlgorithm{
         this.frameDeque = new ArrayDeque<>(pageFrameCount);
         this.pageFaultCount = 0;
         processInput();
-    }
-
-    /**
-     * Processes the input string, returns a list of page numbers.
-     */
-    public void processInput() {
-        //split the string, ignore commas
-        String[] splitString = input.split(",");
-        for (String num : splitString){
-            insert(Integer.parseInt(num));
-        }
-    }
+    }//end constructor
 
     /**
      * Similar to the FIFO algorithm except when a number appears up that is

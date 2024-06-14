@@ -52,7 +52,13 @@ public abstract class ReplacementAlgorithm {
     /**
      * Processes the input string, returns a list of page numbers.
      */
-    public abstract void processInput();
+    public void processInput() {
+        //split the string, ignore commas
+        String[] splitString = input.split(",");
+        for (String num : splitString){
+            insert(Integer.parseInt(num));
+        }
+    }
 
     /**
      * @param pageNumber - the page number to be inserted
