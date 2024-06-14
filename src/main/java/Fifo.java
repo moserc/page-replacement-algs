@@ -7,9 +7,6 @@ import java.util.ArrayDeque;
  */
 public class Fifo extends ReplacementAlgorithm{
 
-    String input;
-    ArrayDeque<Integer> frameDeque;
-
     //constructor
     public Fifo(String input, int pageFrameCount) {
         super(pageFrameCount);
@@ -38,7 +35,7 @@ public class Fifo extends ReplacementAlgorithm{
             frameDeque.add(pageNumber); //add to the tail of the deque
             pageFaultCount++;
         }
-        return pageFaultCount;
+        return getPageFaultCount();
     }
 
     /**
@@ -47,7 +44,6 @@ public class Fifo extends ReplacementAlgorithm{
     public void processInput(){
         //split the string, ignore commas
         String[] splitString = input.split(",");
-        //engage fifo alg
         for (String num : splitString){
             insert(Integer.parseInt(num));
         }
