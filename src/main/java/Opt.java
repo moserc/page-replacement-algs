@@ -4,11 +4,25 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 /**
- * Class for implementing the optimal page replacement algorithm.
+ * Class for implementing the optimal page replacement algorithm. This algorithm
+ * uses a lookahead to determine which page frame will not be used for the
+ * longest amount of time. When that distance is calculated, it chooses the
+ * page with the longest distance as the page to replace.
+ *
+ * Overall time complexity: This case - O(1); Worst case - O(n) as the input
+ * string scales up; absolute worst case - O(n^3 * m) if both input and page frames
+ * were significantly scaled up.
+ *
+ * We know page frames will be a small constant, and therefore the frameDeque
+ * size will be a small constant. This means the insert function will have an
+ * O(1) runtime since we know the linear search of the contains() operation will
+ * be O(1). If page frames were significantly scaled up, this would move
+ * toward O(n^2).
+ *
+ * The processInput operation scales with the size of the input string.
+ * We know in this case it is a bounded constant <= 20.
  */
 public class Opt extends ReplacementAlgorithm{
-
-    ArrayList<Integer> nums;
 
     //constructor
     public Opt(String input, int pageFrameCount) {
@@ -16,78 +30,70 @@ public class Opt extends ReplacementAlgorithm{
         this.NAME = "OPT";
         this.input = input;
         this.frameDeque = new ArrayDeque<>(pageFrameCount);
-        this.nums = new ArrayList<>();
         this.pageFaultCount = 0;
-        processInput();
+        this.inputNums = processInput();
     }//end constructor
 
     /**
-     * Processes the input string, returns a list of page numbers.
-     */
-    @Override
-    public void processInput() {
-        //split the string, ignore commas
-        String[] splitString = input.split(",");
-        for (String num : splitString){
-            nums.add(Integer.parseInt(num));
-        }
-        insert();
-    }
-
-    /**
-     *
+     * When the page frames are full, this method chooses the page to replace
+     * by calculating the longest distance to each page's next instance within
+     * the input string.
+     * Time complexity: in this case, O(1) because page frames are limited to
+     * a low constant; worst case as page frames scale up --> O(n^2 * m)
+     * @param pageNumber - the page number to be inserted
      * @return int - the page fault count
      */
-    public int insert() {
+    public int insert(int pageNumber) {
+        //If the new page number is already in the frame set, do nothing
+        //If not, replace at the appropriate spot and increment page faults
+        if (!frameDeque.contains(pageNumber)) { //n
 
-        //needs a lookahead of some kind to determine the differences in the
-        //next instance's distance
-        //start with fifo.
-        //get next instance distance
-        //replace the page that is furthest, or does not occur again
+            //if there is no empty page frame, remove the page that won't be
+            //needed for the longest time
+            if (frameDeque.size() >= pageFrameCount) {
+                int mostDistantPage = -1; //track the overall longest distance
+                int mostDistance = -1; //track the locally longest distance
+                int distance;
 
+                //check the distance of the next occurrence for each page frame
+                for (int page : frameDeque){ //n
+                    int inputIndex = inputNums.indexOf(page);
+                    int nextIndex = nextOccurrence(inputNums, page, inputIndex + 1);
+                    distance = nextIndex - inputIndex;
 
-        //load the first num
-        frameDeque.add(nums.remove(0));
-        //get distance
-        nums.indexOf(nums.get(0));
+                    //if there is no next occurrence, update and break
+                    if (nextIndex == -1) {
+                        mostDistantPage = page;
+                        break;
 
-        for (int num : nums) {
-            //load the first num
-
-
-            if (!frameDeque.contains(num)) {
-                if (frameDeque.size() >= pageFrameCount) {
-                    frameDeque.poll(); //remove the head of the deque
+                    //if the distance is larger than the biggest distance so far
+                    } else if (distance > mostDistance){
+                        mostDistance = distance;
+                        mostDistantPage = page;
+                    }
                 }
-                frameDeque.add(num); //add to the tail of the deque
-                pageFaultCount++;
-            } else {
-                frameDeque.remove(num); //remove the instance
-                frameDeque.add(num); //reinsert at the tail of the deque
+                frameDeque.remove(mostDistantPage); //remove the page from the deque O(m)
             }
+            frameDeque.add(pageNumber); //add new page to the tail of the deque
+            pageFaultCount++;
         }
         return getPageFaultCount();
     }
 
-    private int getDistance(int num) {
-        int currentIdx = nums.indexOf(num);
-        int nextOccur = -1;
-        for (int i = currentIdx + 1; currentIdx < nums.size(); i++){
-            if (nums.get(i) == num){
-                nextOccur = i;
+    /**
+     * Method for finding the index of the next occurence of a number
+     * within the input string.
+     * @param inputNums - the input string
+     * @param page - the current element
+     * @param startIndex - the index to start searching from
+     * @return the index of the next occurrence; -1 if not found
+     */
+    public int nextOccurrence(ArrayList<Integer> inputNums, int page, int startIndex) {
+        for (int i = startIndex; i < inputNums.size(); i++) {
+            if (inputNums.get(i) == page) {
+                return i;
             }
-            return nextOccur;
         }
-    }
-
-    private boolean isFarther(int num1, int num2){
-        if (num1.getDistance() < num2.getDistance()){
-            swap(num1, num2);
-        }
-    }
-
-    private void swap(int num, int num){
-
+        return -1; //not found
     }
 }
