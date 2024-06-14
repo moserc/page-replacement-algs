@@ -1,5 +1,7 @@
 package main.java;
 
+import java.util.ArrayDeque;
+
 public abstract class ReplacementAlgorithm {
     // the number of page faults
     protected int pageFaultCount;
@@ -12,6 +14,10 @@ public abstract class ReplacementAlgorithm {
 
     // the algorithm name
     protected String NAME;
+
+    ArrayDeque<Integer> frameDeque;
+
+    String input;
 
     /**
      * @param pageFrameCount - the number of physical page frames

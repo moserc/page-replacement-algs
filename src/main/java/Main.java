@@ -2,6 +2,8 @@ package main.java;
 
 import java.util.ArrayList;
 
+import static main.java.HelperMethods.*;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -36,70 +38,48 @@ public class Main {
 
         input.set(3, random7);
         bestResult = processFifo(input, 7, bestResult);
-        System.out.printf("Best page fault result for FIFO: %d\n", bestResult);
+
+        System.out.printf("\nBest page fault result for FIFO: %d\n", bestResult);
+        bestOverall = checkResult(bestOverall, bestResult);
 
         System.out.println("\n-----------------END FIFO RESULTS--------------------");
 
-        /*
         System.out.println("\n---------------BEGIN LRU RESULTS---------------------\n");
+        bestResult = 0;
         input.set(3, random3);
-        Lru lru3 = new Lru(input, 3);
-        lru3.display();
+        bestResult = processLRU(input, 3, bestResult);
+        System.out.println();
 
         input.set(3, random5);
-        Lru lru5 = new Lru(input, 5);
-        lru5.display();
+        bestResult = processLRU(input, 5, bestResult);
+        System.out.println();
 
         input.set(3, random7);
-        Lru lru7 = new Lru(input, 7);
-        lru7.display();
+        bestResult = processLRU(input, 7, bestResult);
+
+        System.out.printf("\nBest page fault result for LRU: %d\n", bestResult);
+        bestOverall = checkResult(bestOverall, bestResult);
+
         System.out.println("\n-----------------END LRU RESULTS---------------------");
 
-
         System.out.println("\n---------------BEGIN OPT RESULTS---------------------\n");
+        bestResult = 0;
         input.set(3, random3);
-        Opt opt3 = new Opt(input, 3);
-        opt3.display();
+        bestResult = processOpt(input, 3, bestResult);
+        System.out.println();
 
         input.set(3, random5);
-        Opt opt5 = new Opt(input, 5);
-        opt5.display();
+        bestResult = processOpt(input, 5, bestResult);
+        System.out.println();
 
         input.set(3, random7);
-        Opt opt7 = new Opt(input, 7);
-        opt7.display();
+        bestResult = processOpt(input, 7, bestResult);
+        System.out.println();
+
+        bestOverall = checkResult(bestOverall, bestResult);
+
         System.out.println("\n-----------------END OPT RESULTS---------------------");
-         */
-    }
 
-    /**
-     * Method for generating a String of 15 random numbers between 0-9.
-     * @return result - the String of random integers between 0-9.
-     */
-    private static String randoString(){
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < 15; i++){
-            int randomNumber = (int)(Math.random() * 10);
-            if (i != 14){
-                result.append(randomNumber).append(",");
-            } else {
-                result.append(randomNumber);
-            }
-        }
-        return result.toString();
-    }
-
-    private static int processFifo(ArrayList<String> input, int pageCount, int bestResult) {
-        for (int i = 0; i < input.size(); i++) {
-            Fifo fifo = new Fifo(input.get(i), pageCount);
-            System.out.printf("Input %d) ", i + 1);
-            fifo.display();
-            if (bestResult == 0) {
-                bestResult = fifo.getPageFaultCount();
-            } else if (fifo.getPageFaultCount() < bestResult) {
-                bestResult = fifo.getPageFaultCount();
-            }
-        }
-        return bestResult;
+        System.out.printf("\n-----------------BEST OVERALL: %d page faults---------", bestOverall);
     }
 }
