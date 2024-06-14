@@ -7,6 +7,12 @@ public abstract class ReplacementAlgorithm {
     // the number of physical page frame
     protected int pageFrameCount;
 
+    // the least number of page faults
+    protected int bestResult;
+
+    // the algorithm name
+    protected String NAME;
+
     /**
      * @param pageFrameCount - the number of physical page frames
      */
@@ -15,7 +21,7 @@ public abstract class ReplacementAlgorithm {
             throw new IllegalArgumentException();
 
         this.pageFrameCount = pageFrameCount;
-        pageFaultCount = 0;
+        resetPageFaultCount();
     }
 
     /**
@@ -25,13 +31,31 @@ public abstract class ReplacementAlgorithm {
         return pageFaultCount;
     }
 
-    public void display() {
-        System.out.printf("The page fault count for %d page frames is %d\n",
-                pageFrameCount, pageFaultCount);
+    public void resetPageFaultCount() {
+        pageFaultCount = 0;
+    }
+
+    public String getName() {
+        return NAME;
+    }
+
+    public int getBestResult() {
+        return bestResult;
     }
 
     /**
-     * @param pageNumber - the page number to be inserted
+     * Processes the input string, returns a list of page numbers.
      */
-    public abstract void insert(int pageNumber);
+    public abstract void processInput();
+
+    /**
+     * @param pageNumber - the page number to be inserted
+     * @return int - the page fault count
+     */
+    public abstract int insert(int pageNumber);
+
+
+    public void display() {
+        System.out.printf("Page faults with %d page frames is %d\n", pageFrameCount, getPageFaultCount());
+    }
 }
