@@ -11,7 +11,6 @@ public abstract class ReplacementAlgorithm {
 
     protected int pageFaultCount; // the number of page faults
     protected int pageFrameCount; // the number of physical page frame
-    protected int bestResult; // the least number of page faults
     protected String NAME; // the algorithm name
     protected ArrayDeque<Integer> frameDeque; // the deque to hold page frames
     protected ArrayList<Integer> inputNums = new ArrayList<>(); // holds the input as a list of numbers
@@ -70,9 +69,8 @@ public abstract class ReplacementAlgorithm {
      * Method for managing page replacement.
      * Time complexity will vary by algorithm.
      * @param pageNumber - the page number to be inserted
-     * @return int - the page fault count
      */
-    public abstract int insert(int pageNumber);
+    public abstract void insert(int pageNumber);
 
 
     /**
