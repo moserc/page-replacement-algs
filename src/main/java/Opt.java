@@ -8,17 +8,14 @@ import java.util.ArrayList;
  * uses a lookahead to determine which page frame will not be used for the
  * longest amount of time. When that distance is calculated, it chooses the
  * page with the longest distance as the page to replace.
- *
  * Overall time complexity: This case - O(1); Worst case - O(n) as the input
  * string scales up; absolute worst case - O(n^3 * m) if both input and page frames
  * were significantly scaled up.
- *
  * We know page frames will be a small constant, and therefore the frameDeque
  * size will be a small constant. This means the insert function will have an
  * O(1) runtime since we know the linear search of the contains() operation will
  * be O(1). If page frames were significantly scaled up, this would move
  * toward O(n^2).
- *
  * The processInput operation scales with the size of the input string.
  * We know in this case it is a bounded constant <= 20.
  */
@@ -40,10 +37,10 @@ public class Opt extends ReplacementAlgorithm{
      * the input string.
      * Time complexity: in this case, O(1) because page frames are limited to
      * a low constant; worst case as page frames scale up --> O(n^2 * m)
+     *
      * @param pageNumber - the page number to be inserted
-     * @return int - the page fault count
      */
-    public int insert(int pageNumber) {
+    public void insert(int pageNumber) {
         //If the new page number is already in the frame set, do nothing
         //If not, replace at the appropriate spot and increment page faults
         if (!frameDeque.contains(pageNumber)) { //n
@@ -77,7 +74,6 @@ public class Opt extends ReplacementAlgorithm{
             frameDeque.add(pageNumber); //add new page to the tail of the deque
             pageFaultCount++;
         }
-        return getPageFaultCount();
     }
 
     /**

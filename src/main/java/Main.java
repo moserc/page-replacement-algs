@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
 
         ArrayList<String> input = new ArrayList<>();
-        int bestOverall = 0;
 
         //provided input
         input.add("7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1");
@@ -29,59 +28,51 @@ public class Main {
                 random3, random5, random7 + "\n");
 
         System.out.println("\n---------------BEGIN FIFO RESULTS--------------------\n");
-        int bestResult = 0;
 
         input.add(random3);
-        bestResult = processFifo(input, 3, bestResult);
+        processFifo(input, 3);
         System.out.println();
 
         input.set(3, random5);
-        bestResult = processFifo(input, 5, bestResult);
+        processFifo(input, 5);
         System.out.println();
 
         input.set(3, random7);
-        bestResult = processFifo(input, 7, bestResult);
+        processFifo(input, 7);
 
-        System.out.printf("\nBest page fault result for FIFO: %d\n", bestResult);
-        bestOverall = checkResult(bestOverall, bestResult);
         System.out.println("\n-----------------END FIFO RESULTS--------------------");
 
         System.out.println("\n---------------BEGIN LRU RESULTS---------------------\n");
-        bestResult = 0;
 
         input.set(3, random3);
-        bestResult = processLRU(input, 3, bestResult);
+        processLRU(input, 3);
         System.out.println();
 
         input.set(3, random5);
-        bestResult = processLRU(input, 5, bestResult);
+        processLRU(input, 5);
         System.out.println();
 
         input.set(3, random7);
-        bestResult = processLRU(input, 7, bestResult);
+        processLRU(input, 7);
 
-        System.out.printf("\nBest page fault result for LRU: %d\n", bestResult);
-        bestOverall = checkResult(bestOverall, bestResult);
         System.out.println("\n-----------------END LRU RESULTS---------------------");
 
         System.out.println("\n---------------BEGIN OPT RESULTS---------------------\n");
-        bestResult = 0;
 
         input.set(3, random3);
-        bestResult = processOpt(input, 3, bestResult);
+        processOpt(input, 3);
         System.out.println();
 
         input.set(3, random5);
-        bestResult = processOpt(input, 5, bestResult);
+        processOpt(input, 5);
         System.out.println();
 
         input.set(3, random7);
-        bestResult = processOpt(input, 7, bestResult);
+        processOpt(input, 7);
 
-        System.out.printf("\nBest page fault result for OPT: %d\n", bestResult);
-        bestOverall = checkResult(bestOverall, bestResult);
         System.out.println("\n-----------------END OPT RESULTS---------------------");
 
-        System.out.printf("\n-----------------BEST OVERALL: %d page faults---------", bestOverall);
+        System.out.printf("\nBEST OVERALL: %s at %d pages with an average performance of" +
+                " %d page faults", bestAlg, bestConfig, bestAverage);
     }
 }

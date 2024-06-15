@@ -7,6 +7,11 @@ import java.util.ArrayList;
  */
 public class HelperMethods {
 
+    static ArrayList<Integer> results = new ArrayList<>();
+    static int bestAverage = 0;
+    static String bestAlg = "";
+    static int bestConfig = -1;
+
     /**
      * Method for generating a String of 15 random numbers between 0-9.
      * Time complexity: 0(1)
@@ -28,12 +33,11 @@ public class HelperMethods {
     /**
      * Method for processing all FIFO inputs.
      * Time complexity: O(n)
-     * @param input - An arraylist consisting of four input strings.
+     * @param input     - An arraylist consisting of four input strings.
      * @param pageCount - Specified number of page frames.
-     * @param bestResult - Tracking for the lowest number of page counts.
-     * @return - bestResult.
      */
-    static int processFifo(ArrayList<String> input, int pageCount, int bestResult) {
+    static void processFifo(ArrayList<String> input, int pageCount) {
+        int bestResult = 0;
         for (int i = 0; i < input.size(); i++) {
             Fifo fifo = new Fifo(input.get(i), pageCount);
             System.out.printf("Input %d) ", i + 1);
@@ -43,19 +47,20 @@ public class HelperMethods {
             } else if (fifo.getPageFaultCount() < bestResult) {
                 bestResult = fifo.getPageFaultCount();
             }
+            results.add(fifo.getPageFaultCount());
         }
-        return bestResult;
+        average(results, "FIFO", pageCount);
+        results.clear();
     }
 
     /**
      * Method for processing all LRU inputs.
      * Time complexity: O(n)
-     * @param input - An arraylist consisting of four input strings.
-     * @param pageCount - Specified number of page frames.
-     * @param bestResult - Tracking for the lowest number of page counts.
-     * @return - bestResult.
+     * @param input      - An arraylist consisting of four input strings.
+     * @param pageCount  - Specified number of page frames.
      */
-    static int processLRU(ArrayList<String> input, int pageCount, int bestResult) {
+    static void processLRU(ArrayList<String> input, int pageCount) {
+        int bestResult = 0;
         for (int i = 0; i < input.size(); i++) {
             Lru lru = new Lru(input.get(i), pageCount);
             System.out.printf("Input %d) ", i + 1);
@@ -65,19 +70,20 @@ public class HelperMethods {
             } else if (lru.getPageFaultCount() < bestResult) {
                 bestResult = lru.getPageFaultCount();
             }
+            results.add(lru.getPageFaultCount());
         }
-        return bestResult;
+        average(results, "LRU", pageCount);
+        results.clear();
     }
 
     /**
      * Method for processing all OPT inputs.
      * Time complexity: O(n)
-     * @param input - An arraylist consisting of four input strings.
+     * @param input     - An arraylist consisting of four input strings.
      * @param pageCount - Specified number of page frames.
-     * @param bestResult - Tracking for the lowest number of page counts.
-     * @return - bestResult.
      */
-    static int processOpt(ArrayList<String> input, int pageCount, int bestResult) {
+    static void processOpt(ArrayList<String> input, int pageCount) {
+        int bestResult = 0;
         for (int i = 0; i < input.size(); i++) {
             Opt opt = new Opt(input.get(i), pageCount);
             System.out.printf("Input %d) ", i + 1);
@@ -87,25 +93,30 @@ public class HelperMethods {
             } else if (opt.getPageFaultCount() < bestResult) {
                 bestResult = opt.getPageFaultCount();
             }
+            results.add(opt.getPageFaultCount());
         }
-        return bestResult;
+        average(results, "OPT", pageCount);
+        results.clear();
     }
 
     /**
-     * Updates "bestOverall" to keeps track of the lowest number of page faults
-     * across all algorithms and configurations.
-     * Time complexity: O(1)
-     * @param bestOverall - Tracking for the lowest number of page counts across
-     *                    all page replacement algorithms and configurations.
-     * @param bestResult - Tracking for the lowest number of page counts.
-     * @return bestOverall.
+     * Calculates the average.
+     * @param list  - list of results
+     * @param name  - name of the alg
+     * @param pages - page frame count
      */
-    static int checkResult(int bestOverall, int bestResult){
-        if (bestOverall == 0) {
-            bestOverall = bestResult;
-        } else if (bestResult != 0 && bestResult < bestOverall) {
-            bestOverall = bestResult;
+    static void average(ArrayList<Integer> list, String name, int pages) {
+        int sum = 0;
+        for (int num : list) {
+            sum += num;
         }
-        return bestOverall;
+        int average = sum / list.size();
+        System.out.printf("Average performance for %s at %d: %d page faults\n", name, pages, average);
+
+        if (bestAverage == 0 || average <= bestAverage){
+            bestAverage = average;
+            bestAlg = name;
+            bestConfig = pages;
+        }
     }
 }
